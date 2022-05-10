@@ -24,7 +24,7 @@ pipeline {
             parallel {
                 stage('Unit') {
                     steps {
-                        bat '''
+                        sh '''
                             export PYTHONPATH=${PYTHONPATH}:.
                             pytest --junitxml=result-unit.xml test/unit
                         '''
@@ -32,7 +32,7 @@ pipeline {
                 }
                 stage('Service') {
                     steps {
-                        bat '''
+                        sh '''
                             export FLASK_APP=app/api.py
                             export FLASK_ENV=development
                             nohup flask run >/dev/null 2>&1
