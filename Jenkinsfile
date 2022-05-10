@@ -25,20 +25,20 @@ pipeline {
                 stage('Unit') {
                     steps {
                         bat '''
-                            set PYTHONPATH=%WORKSPACE%
-                            pytest --junitxml=result-unit.xml test\\unit
+                            export PYTHONPATH=${PYTHONPATH}:.
+                            pytest --junitxml=result-unit.xml test/unit
                         '''
                     }
                 }
                 stage('Service') {
                     steps {
                         bat '''
-                            set FLASK_APP=app\\api.py
-                            set FLASK_ENV=development
-                            start flask run
-                            start java -jar C:\\python\\unir\\helloworld\\wiremock-jre8-standalone-2.33.1.jar --port 9090 --root-dir C:\\python\\unir\\helloworld
-                            set PYTHONPATH=%WORKSPACE%
-                            pytest --junitxml=result-rest.xml test\\rest
+                            export FLASK_APP=app/api.py
+                            export FLASK_ENV=development
+                            nohup flask run >/dev/null 2>&1
+                            nohup java -jar /wiremock-jre8-standalone-2.33.1.jar --port 9090 --root-dir /var/tmp &
+                            export PYTHONPATH=${PYTHONPATH}:.
+                            pytest --junitxml=result-rest.xml test/rest
                         '''
                     }    
                 }
