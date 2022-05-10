@@ -35,8 +35,8 @@ pipeline {
                         sh '''
                             export FLASK_APP=app/api.py
                             export FLASK_ENV=development
-                            nohup flask run >/dev/null 2>&1 &
-                            nohup java -jar /wiremock-jre8-standalone-2.33.1.jar --port 9090 --root-dir /var/tmp &
+                            flask run >/dev/null 2>&1 &
+                            java -jar /wiremock-jre8-standalone-2.33.1.jar --port 9090 --root-dir /var/tmp &
                             export PYTHONPATH=${PYTHONPATH}:.
                             pytest --junitxml=result-rest.xml test/rest
                         '''
